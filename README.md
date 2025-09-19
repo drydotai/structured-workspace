@@ -16,7 +16,7 @@ A lightweight Python SDK for building AI applications with natural language data
 ## Installation
 
 ```bash
-pip install git+https://github.com/drydotai/drydotai-agent-python.git@alpha
+pip install git+https://github.com/drydotai/structured-workspace.git@alpha
 ```
 
 ## Quick Start
@@ -217,6 +217,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-- **Documentation**: [GitHub README](https://github.com/drydotai/drydotai-agent-python)
-- **Issues**: [GitHub Issues](https://github.com/drydotai/drydotai-agent-python/issues)
+- **Documentation**: [GitHub README](https://github.com/drydotai/structured-workspace)
+- **Issues**: [GitHub Issues](https://github.com/drydotai/structured-workspace/issues)
 - **Homepage**: [https://dry.ai](https://dry.ai)
