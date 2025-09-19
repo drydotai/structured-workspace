@@ -1,6 +1,5 @@
 # drydotai
 
-[![PyPI version](https://badge.fury.io/py/drydotai.svg)](https://badge.fury.io/py/drydotai)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -16,13 +15,9 @@ A lightweight Python SDK for building AI applications with natural language data
 
 ## Installation
 
-Install directly from GitHub:
-
 ```bash
-pip install git+https://github.com/drydotai/drydotai-agent-python.git
+pip install git+https://github.com/drydotai/drydotai-agent-python.git@alpha
 ```
-
-> PyPI package coming soon
 
 ## Quick Start
 
