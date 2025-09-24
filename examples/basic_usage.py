@@ -19,13 +19,7 @@ def main():
     print("\n2. Adding structure to workspace")
 
     # Create a type definition
-    task_type = space.add_type("""
-    Create a Task type with fields:
-    - title (text)
-    - status (options: todo, in_progress, done)
-    - priority (options: low, medium, high)
-    - due_date (date)
-    """)
+    task_type = space.add_type("Create a Task type with title, status (todo/in_progress/done), priority (low/medium/high), and due_date fields")
     print("✅ Created Task type")
 
     # Create a folder

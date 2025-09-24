@@ -28,12 +28,7 @@ from drydotai import create_smartspace
 smartspace = create_smartspace("Project Management")
 
 # Add structured data
-task_type = smartspace.add_type("""
-Create a Task type with:
-- title (text)
-- status (options: todo, in_progress, done)
-- priority (options: low, medium, high)
-""")
+task_type = smartspace.add_type("Create a Task type with title, status (todo/in_progress/done), and priority (low/medium/high)")
 
 # Create and manage items
 task = smartspace.add_item("Implement user authentication with priority high")
@@ -41,6 +36,12 @@ tasks = smartspace.search("find all high priority tasks")
 
 # Update with natural language
 task.update("mark as in progress and add note: started implementation")
+
+# Share workspace with team members
+smartspace.update("Share member access with user1@example.com, teammate@example.com, and demo@example.com")
+
+# Set a custom subdomain for the workspace
+smartspace.update("Set subdomain to firstprojectsmartspace")
 ```
 
 ## Core Concepts
