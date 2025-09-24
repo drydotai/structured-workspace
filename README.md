@@ -16,7 +16,7 @@ A lightweight Python SDK for building AI applications with natural language data
 ## Installation
 
 ```bash
-pip install git+ssh://git@github.com/drydotai/structured-workspace.git@alpha
+pip install git+https://github.com/drydotai/structured-workspace.git@alpha
 ```
 
 ## Quick Start
