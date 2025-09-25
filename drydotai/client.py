@@ -97,7 +97,20 @@ class DryAIItem:
     
     
     def __repr__(self) -> str:
-        return f"DryAIItem(id={self.id}, name={self.name})"
+        """Show all available properties so users know what they can access"""
+        lines = [f"DryAIItem("]
+
+        # Show all properties from the API response with lowercase keys
+        for key, value in sorted(self._data.items()):
+            # Truncate long values for readability
+            if isinstance(value, str) and len(value) > 80:
+                display_value = value[:77] + "..."
+            else:
+                display_value = repr(value)
+            lines.append(f"  {key.lower()}: {display_value}")
+
+        lines.append(")")
+        return "\n".join(lines)
 
 
 class DryAIClient:
@@ -313,7 +326,20 @@ class Space:
         return self.client.delete_item(self.id)
     
     def __repr__(self) -> str:
-        return f"Space(id={self.id}, name={self.name})"
+        """Show all available properties so users know what they can access"""
+        lines = [f"Space("]
+
+        # Show all properties from the underlying DryAIItem with lowercase keys
+        for key, value in sorted(self._data._data.items()):
+            # Truncate long values for readability
+            if isinstance(value, str) and len(value) > 80:
+                display_value = value[:77] + "..."
+            else:
+                display_value = repr(value)
+            lines.append(f"  {key.lower()}: {display_value}")
+
+        lines.append(")")
+        return "\n".join(lines)
 
 
 def _get_auth_token(auth: Optional[str] = None, auto_authenticate: bool = True) -> Optional[str]:
