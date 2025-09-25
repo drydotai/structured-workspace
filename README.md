@@ -43,8 +43,8 @@ task.update("mark as in progress and add note: started implementation")
 # Share workspace with team members
 space.update("Share member access with user1@example.com, teammate@example.com, and demo@example.com")
 
-# Set a custom subdomain for the workspace
-space.update("Set subdomain to firstprojectspace")
+# Set a custom subdomain for the workspace (must be globally unique)
+space.update("Set subdomain to <unique name for space>")
 ```
 
 ## Core Concepts
@@ -67,32 +67,14 @@ Define structured data models using conversational descriptions.
 
 ```python
 # Define custom data structures
-user_type = space.add_type("""
-Create a User type with:
-- name (text)
-- email (email)
-- role (options: admin, user, guest)
-- created_at (datetime)
-""")
-
-ticket_type = space.add_type("""
-Create a SupportTicket type with:
-- title (text)
-- description (text)
-- severity (options: low, medium, high, critical)
-- assigned_to (reference to User)
-""")
+ticket_type = space.add_type("Create a SupportTicket type with title, description, and severity that can be low or medium or high or critical")
 ```
 
 ### Natural Language Operations
 
 ```python
 # Create items with context
-ticket = space.add_item("""
-Create support ticket: Database connection timeout
-Severity: critical
-Description: Users unable to access application
-""")
+ticket = space.add_item("Create support ticket for database connection timeout with critical severity, users unable to access application")
 
 # Intelligent search
 critical_tickets = space.search("find all critical tickets from this week")
@@ -208,5 +190,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 - **Documentation**: [GitHub README](https://github.com/drydotai/structured-workspace)
-- **Issues**: [GitHub Issues](https://github.com/drydotai/structured-workspace/issues)
 - **Homepage**: [https://dry.ai](https://dry.ai)
