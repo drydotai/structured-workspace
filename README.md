@@ -22,7 +22,10 @@ pip install git+https://github.com/drydotai/structured-workspace.git@alpha
 ## Quick Start
 
 ```python
-from drydotai import create_smartspace
+from drydotai import create_smartspace, set_verbose_logging
+
+# Enable verbose logging to see when API calls complete successfully
+set_verbose_logging(True)
 
 # Create a smartspace - authentication happens automatically
 smartspace = create_smartspace("Project Management")

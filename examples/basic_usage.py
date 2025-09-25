@@ -2,11 +2,14 @@
 Basic Usage Example - Getting started with drydotai
 """
 
-from drydotai import create_smartspace
+from drydotai import create_smartspace, set_verbose_logging
 
 def main():
     print("🚀 drydotai Basic Usage Example")
     print("=" * 40)
+
+    # Enable verbose logging to see API call confirmations
+    set_verbose_logging(True)
 
     # 1. Create a workspace (authentication happens automatically if needed)
     print("\n1. Creating a workspace")

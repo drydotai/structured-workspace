@@ -7,7 +7,8 @@ from .client import (
     DryAIItem,
     create_smartspace,
     get_smartspace,
-    get_smartspace_by_id
+    get_smartspace_by_id,
+    set_verbose_logging
 )
 
 from .auth import (
@@ -24,6 +25,7 @@ __all__ = [
     "create_smartspace",
     "get_smartspace",
     "get_smartspace_by_id",
+    "set_verbose_logging",
     "authenticate_user",
     "get_stored_token",
     "is_authenticated",

@@ -101,13 +101,18 @@ class DryAIItem:
 
 
 class DryAIClient:
-    def __init__(self, auth_token: Optional[str] = None, server_url: Optional[str] = None):
+    def __init__(self, auth_token: Optional[str] = None, server_url: Optional[str] = None, verbose: Optional[bool] = None):
         # Allow server override via parameter or environment variable
         self.server = server_url or os.getenv('DRY_AI_SERVER', 'https://dry.ai')
         # Auto-load auth token from environment if not provided
         self.auth_token = auth_token or os.getenv('DRY_AI_TOKEN')
+        # Configure verbosity: parameter > environment variable > default (False)
+        if verbose is not None:
+            self.verbose = verbose
+        else:
+            self.verbose = os.getenv('DRY_AI_VERBOSE', '').lower() in ('true', '1', 'yes')
         self.user_agent = "drydotai-python/1.0"
-        
+
         # CRUD API endpoints
         self.base_url = f"{self.server}/api/crud-gpt"
         self.items_url = f"{self.base_url}/items"
@@ -129,7 +134,7 @@ class DryAIClient:
     def _make_request(self, method: str, url: str, data: Optional[Dict[str, Any]] = None, params: Optional[Dict[str, str]] = None) -> Optional[Dict[str, Any]]:
         """Make HTTP request to the API"""
         headers = self._get_headers()
-        
+
         try:
             if method.upper() == 'GET':
                 response = requests.get(url, headers=headers, params=params)
@@ -141,11 +146,28 @@ class DryAIClient:
                 response = requests.delete(url, headers=headers, params=params)
             else:
                 raise ValueError(f"Unsupported HTTP method: {method}")
-            
+
             response.raise_for_status()
-            return response.json()
+            result = response.json()
+
+            # Verbose logging for successful requests
+            if self.verbose:
+                print("✅ Call completed successfully")
+
+            return result
         except requests.RequestException as error:
-            print(f"Error making request to {url}: {error}")
+            # Always show errors, get detailed message from response if available
+            error_message = str(error)
+            if hasattr(error, 'response') and error.response is not None:
+                try:
+                    error_data = error.response.json()
+                    if 'error' in error_data:
+                        error_message = error_data['error']
+                    elif 'message' in error_data:
+                        error_message = error_data['message']
+                except:
+                    pass
+            print(f"❌ Call failed: {error_message}")
             return None
     
     def create_item(self, item_type: str, query: str, folder: Optional[str] = None) -> Optional[DryAIItem]:
@@ -399,24 +421,37 @@ def get_smartspace(query: str, auth: Optional[str] = None) -> Optional[Smartspac
 
 def get_smartspace_by_id(smartspace_id: str, auth: Optional[str] = None) -> Optional[Smartspace]:
     """Get an existing smartspace by its ID
-    
+
     Args:
         smartspace_id: The unique ID of the smartspace
         auth: Auth token (if None, will use DRY_AI_TOKEN environment variable)
-        
+
     Returns:
         Smartspace object if found, None otherwise
     """
     global _client
     auth_token = _get_auth_token(auth)
     server_url = os.getenv('DRY_AI_SERVER')
-    
+
     # Recreate client if auth or server changed
     if (auth_token and _client.auth_token != auth_token) or (server_url and _client.server != server_url):
         _client = DryAIClient(auth_token=auth_token, server_url=server_url)
-    
+
     item = _client.get_item(item_id=smartspace_id)
     if item:
         return Smartspace(item, _client)
     return None
+
+
+def set_verbose_logging(enabled: bool = True) -> None:
+    """Enable or disable verbose logging for all dry.ai API calls
+
+    Args:
+        enabled: True to show success confirmations, False for silent mode
+
+    When enabled, successful API calls will show "✅ Call completed successfully"
+    Failed calls always show detailed error messages regardless of this setting
+    """
+    global _client
+    _client.verbose = enabled
 
