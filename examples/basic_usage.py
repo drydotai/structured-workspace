@@ -2,7 +2,7 @@
 Basic Usage Example - Getting started with drydotai
 """
 
-from drydotai import create_smartspace, set_verbose_logging
+from drydotai import create_space, set_verbose_logging
 
 def main():
     print("🚀 drydotai Basic Usage Example")
@@ -13,7 +13,7 @@ def main():
 
     # 1. Create a workspace (authentication happens automatically if needed)
     print("\n1. Creating a workspace")
-    space = create_smartspace("My first project workspace")
+    space = create_space("My first project workspace")
     print(f"✅ Created workspace: {space.name}")
     print(f"   Workspace ID: {space.id}")
     print(f"   View at: {space.url}")

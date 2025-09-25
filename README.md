@@ -22,44 +22,44 @@ pip install git+https://github.com/drydotai/structured-workspace.git@alpha
 ## Quick Start
 
 ```python
-from drydotai import create_smartspace, set_verbose_logging
+from drydotai import create_space, set_verbose_logging
 
 # Enable verbose logging to see when API calls complete successfully
 set_verbose_logging(True)
 
-# Create a smartspace - authentication happens automatically
-smartspace = create_smartspace("Project Management")
+# Create a space - authentication happens automatically
+space = create_space("Project Management")
 
 # Add structured data
-task_type = smartspace.add_type("Create a Task type with title, status (todo/in_progress/done), and priority (low/medium/high)")
+task_type = space.add_type("Create a Task type with title, status (todo/in_progress/done), and priority (low/medium/high)")
 
 # Create and manage items
-task = smartspace.add_item("Implement user authentication with priority high")
-tasks = smartspace.search("find all high priority tasks")
+task = space.add_item("Implement user authentication with priority high")
+tasks = space.search("find all high priority tasks")
 
 # Update with natural language
 task.update("mark as in progress and add note: started implementation")
 
 # Share workspace with team members
-smartspace.update("Share member access with user1@example.com, teammate@example.com, and demo@example.com")
+space.update("Share member access with user1@example.com, teammate@example.com, and demo@example.com")
 
 # Set a custom subdomain for the workspace
-smartspace.update("Set subdomain to firstprojectsmartspace")
+space.update("Set subdomain to firstprojectspace")
 ```
 
 ## Core Concepts
 
-### Smartspaces
+### Spaces
 Intelligent workspaces that organize your data with natural language understanding.
 
 ```python
-from drydotai import create_smartspace, get_smartspace
+from drydotai import create_space, get_space
 
-# Create new smartspace
-smartspace = create_smartspace("Customer support knowledge base")
+# Create new space
+space = create_space("Customer support knowledge base")
 
-# Retrieve existing smartspace
-smartspace = get_smartspace("find my customer support smartspace")
+# Retrieve existing space
+space = get_space("find my customer support space")
 ```
 
 ### Dynamic Types
@@ -67,7 +67,7 @@ Define structured data models using conversational descriptions.
 
 ```python
 # Define custom data structures
-user_type = smartspace.add_type("""
+user_type = space.add_type("""
 Create a User type with:
 - name (text)
 - email (email)
@@ -75,7 +75,7 @@ Create a User type with:
 - created_at (datetime)
 """)
 
-ticket_type = smartspace.add_type("""
+ticket_type = space.add_type("""
 Create a SupportTicket type with:
 - title (text)
 - description (text)
@@ -88,19 +88,19 @@ Create a SupportTicket type with:
 
 ```python
 # Create items with context
-ticket = smartspace.add_item("""
+ticket = space.add_item("""
 Create support ticket: Database connection timeout
 Severity: critical
 Description: Users unable to access application
 """)
 
 # Intelligent search
-critical_tickets = smartspace.search("find all critical tickets from this week")
-unassigned = smartspace.search("show unassigned tickets with high severity")
+critical_tickets = space.search("find all critical tickets from this week")
+unassigned = space.search("show unassigned tickets with high severity")
 
 # Bulk operations
-smartspace.update_items("assign all critical tickets to admin users")
-smartspace.delete_items("delete all resolved tickets older than 30 days")
+space.update_items("assign all critical tickets to admin users")
+space.delete_items("delete all resolved tickets older than 30 days")
 ```
 
 ## Authentication
@@ -118,11 +118,11 @@ Enter verification code: 123456
 
 | Function | Description |
 |----------|-------------|
-| `create_smartspace(description)` | Create new smartspace with natural language |
-| `get_smartspace(query)` | Find existing smartspace by description |
-| `get_smartspace_by_id(id)` | Retrieve smartspace by ID |
+| `create_space(description)` | Create new space with natural language |
+| `get_space(query)` | Find existing space by description |
+| `get_space_by_id(id)` | Retrieve space by ID |
 
-### Smartspace Methods
+### Space Methods
 
 | Method | Description |
 |--------|-------------|
@@ -132,8 +132,8 @@ Enter verification code: 123456
 | `search(query)` | Find items using natural language |
 | `update_items(query)` | Bulk update multiple items |
 | `delete_items(query)` | Delete items matching query |
-| `update(query)` | Update smartspace properties |
-| `delete()` | Delete entire smartspace |
+| `update(query)` | Update space properties |
+| `delete()` | Delete entire space |
 
 ### Item Operations
 
@@ -152,7 +152,7 @@ print(f"Priority: {item.priority}")
 
 ### Project Management
 ```python
-project = create_smartspace("Software development project tracker")
+project = create_space("Software development project tracker")
 
 # Define project structure
 project.add_type("Epic with title, description, and story points")
@@ -166,7 +166,7 @@ stories = project.search("find all user stories for authentication epic")
 
 ### Knowledge Management
 ```python
-kb = create_smartspace("Technical documentation system")
+kb = create_space("Technical documentation system")
 
 # Structure knowledge
 kb.add_type("Article with title, content, tags, and last_updated")
@@ -181,14 +181,14 @@ faqs = kb.search("find all authentication related FAQs")
 ```python
 # Process external data
 for user_data in external_api.get_users():
-    smartspace.add_item(f"""
+    space.add_item(f"""
     Create user: {user_data['name']}
     Email: {user_data['email']}
     Role: {user_data['role']}
     """)
 
 # Query and analyze
-active_users = smartspace.search("find all users who logged in this month")
+active_users = space.search("find all users who logged in this month")
 ```
 
 ## Examples

@@ -3,7 +3,7 @@ Simple Issue Tracker Example
 """
 
 import os
-from drydotai import create_smartspace, get_smartspace_by_id
+from drydotai import create_space, get_space_by_id
 
 # Configuration
 WORKSPACE_NAME = "Issue Tracker"
@@ -14,7 +14,7 @@ def setup_workspace():
     print("🔧 Setting up Issue Tracker workspace...")
 
     # Create workspace (authentication happens automatically if needed)
-    space = create_smartspace(WORKSPACE_NAME)
+    space = create_space(WORKSPACE_NAME)
 
     # Save workspace ID for later use
     with open(WORKSPACE_ID_FILE, 'w') as f:
@@ -43,7 +43,7 @@ def get_workspace():
     with open(WORKSPACE_ID_FILE, 'r') as f:
         workspace_id = f.read().strip()
 
-    space = get_smartspace_by_id(workspace_id)
+    space = get_space_by_id(workspace_id)
     if not space:
         print("Error: Could not connect to workspace. Run setup again.")
         return None

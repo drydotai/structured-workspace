@@ -195,7 +195,7 @@ class DryAIClient:
         return None
     
     def get_item(self, item_id: Optional[str] = None, item_type: Optional[str] = None, query: Optional[str] = None) -> Optional[DryAIItem]:
-        """Get an item by ID or search for smartspace by query"""
+        """Get an item by ID or search for space by query"""
         params = {}
         if item_id:
             params['item'] = item_id
@@ -257,19 +257,19 @@ class DryAIClient:
         return response is not None
 
 
-class Smartspace:
-    """Main interface for interacting with a Dry.ai smartspace"""
+class Space:
+    """Main interface for interacting with a Dry.ai space"""
     
-    def __init__(self, smartspace_data: DryAIItem, client: DryAIClient):
-        self._data = smartspace_data
+    def __init__(self, space_data: DryAIItem, client: DryAIClient):
+        self._data = space_data
         self.client = client
-        self.id = smartspace_data.id
-        self.name = smartspace_data.name
-        self.description = smartspace_data.description
-        self.url = smartspace_data.url
+        self.id = space_data.id
+        self.name = space_data.name
+        self.description = space_data.description
+        self.url = space_data.url
     
     def search(self, query: str) -> List[DryAIItem]:
-        """Search for items in this smartspace using natural language
+        """Search for items in this space using natural language
 
         Args:
             query: Natural language search query
@@ -280,27 +280,27 @@ class Smartspace:
         return self.client.list_items(self.id, query)
     
     def add_type(self, query: str) -> Optional[DryAIItem]:
-        """Add a new type definition to this smartspace"""
+        """Add a new type definition to this space"""
         return self.client.create_item('TYPE', query, self.id)
     
     def add_item(self, query: str) -> Optional[DryAIItem]:
-        """Add a new generic item to this smartspace"""
+        """Add a new generic item to this space"""
         return self.client.create_item('ITEM', query, self.id)
     
     def add_folder(self, query: str) -> Optional[DryAIItem]:
-        """Add a new folder to this smartspace"""
+        """Add a new folder to this space"""
         return self.client.create_item('FOLDER', query, self.id)
     
     def delete_items(self, query: str) -> bool:
-        """Delete items in this smartspace that match the query"""
+        """Delete items in this space that match the query"""
         return self.client.delete_items_by_query(self.id, query)
     
     def update_items(self, query: str) -> List[DryAIItem]:
-        """Update multiple items in this smartspace using natural language instructions"""
+        """Update multiple items in this space using natural language instructions"""
         return self.client.update_items(self.id, query)
     
-    def update(self, query: str) -> 'Smartspace':
-        """Update this smartspace using natural language instructions"""
+    def update(self, query: str) -> 'Space':
+        """Update this space using natural language instructions"""
         updated_item = self.client.update_item(self.id, query)
         if updated_item:
             self._data = updated_item
@@ -309,11 +309,11 @@ class Smartspace:
         return self
     
     def delete(self) -> bool:
-        """Delete this smartspace"""
+        """Delete this space"""
         return self.client.delete_item(self.id)
     
     def __repr__(self) -> str:
-        return f"Smartspace(id={self.id}, name={self.name})"
+        return f"Space(id={self.id}, name={self.name})"
 
 
 def _get_auth_token(auth: Optional[str] = None, auto_authenticate: bool = True) -> Optional[str]:
@@ -371,15 +371,15 @@ def _get_auth_token(auth: Optional[str] = None, auto_authenticate: bool = True) 
 _client = DryAIClient()
 
 
-def create_smartspace(query: str, auth: Optional[str] = None) -> Optional[Smartspace]:
-    """Create a new smartspace using natural language description
-    
+def create_space(query: str, auth: Optional[str] = None) -> Optional[Space]:
+    """Create a new space using natural language description
+
     Args:
-        query: Natural language description of the smartspace to create
+        query: Natural language description of the space to create
         auth: Auth token (if None, will use DRY_AI_TOKEN environment variable)
-        
+
     Returns:
-        Smartspace object if successful, None otherwise
+        Space object if successful, None otherwise
     """
     global _client
     auth_token = _get_auth_token(auth)
@@ -391,19 +391,19 @@ def create_smartspace(query: str, auth: Optional[str] = None) -> Optional[Smarts
     
     item = _client.create_item('SMARTSPACE', query)
     if item:
-        return Smartspace(item, _client)
+        return Space(item, _client)
     return None
 
 
-def get_smartspace(query: str, auth: Optional[str] = None) -> Optional[Smartspace]:
-    """Get an existing smartspace by natural language query
-    
+def get_space(query: str, auth: Optional[str] = None) -> Optional[Space]:
+    """Get an existing space by natural language query
+
     Args:
-        query: Natural language query to find the smartspace
+        query: Natural language query to find the space
         auth: Auth token (if None, will use DRY_AI_TOKEN environment variable)
-        
+
     Returns:
-        Smartspace object if found, None otherwise
+        Space object if found, None otherwise
     """
     global _client
     auth_token = _get_auth_token(auth)
@@ -415,19 +415,19 @@ def get_smartspace(query: str, auth: Optional[str] = None) -> Optional[Smartspac
     
     item = _client.get_item(item_type='SMARTSPACE', query=query)
     if item:
-        return Smartspace(item, _client)
+        return Space(item, _client)
     return None
 
 
-def get_smartspace_by_id(smartspace_id: str, auth: Optional[str] = None) -> Optional[Smartspace]:
-    """Get an existing smartspace by its ID
+def get_space_by_id(space_id: str, auth: Optional[str] = None) -> Optional[Space]:
+    """Get an existing space by its ID
 
     Args:
-        smartspace_id: The unique ID of the smartspace
+        space_id: The unique ID of the space
         auth: Auth token (if None, will use DRY_AI_TOKEN environment variable)
 
     Returns:
-        Smartspace object if found, None otherwise
+        Space object if found, None otherwise
     """
     global _client
     auth_token = _get_auth_token(auth)
@@ -437,9 +437,9 @@ def get_smartspace_by_id(smartspace_id: str, auth: Optional[str] = None) -> Opti
     if (auth_token and _client.auth_token != auth_token) or (server_url and _client.server != server_url):
         _client = DryAIClient(auth_token=auth_token, server_url=server_url)
 
-    item = _client.get_item(item_id=smartspace_id)
+    item = _client.get_item(item_id=space_id)
     if item:
-        return Smartspace(item, _client)
+        return Space(item, _client)
     return None
 
 
