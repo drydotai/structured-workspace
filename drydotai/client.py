@@ -163,6 +163,10 @@ class DryAIClient:
             response.raise_for_status()
             result = response.json()
 
+            # Always show messages from API response
+            if isinstance(result, dict) and 'message' in result and result['message']:
+                print(f"💬 {result['message']}")
+
             # Verbose logging for successful requests
             if self.verbose:
                 print("✅ Call completed successfully")
