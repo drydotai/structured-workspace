@@ -177,20 +177,6 @@ article = kb.add_item("API integration guide with authentication patterns")
 faqs = kb.search("find all authentication related FAQs")
 ```
 
-### Data Integration
-```python
-# Process external data
-for user_data in external_api.get_users():
-    space.add_item(f"""
-    Create user: {user_data['name']}
-    Email: {user_data['email']}
-    Role: {user_data['role']}
-    """)
-
-# Query and analyze
-active_users = space.search("find all users who logged in this month")
-```
-
 ## Examples
 
 Complete working examples available in [`examples/`](examples/):
