@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "drydotai"
-version = "0.2.0"
+version = "0.3.0"
 description = "Python client library for Dry.ai CRUD API - create and manage spaces with natural language"
 readme = "README.md"
 requires-python = ">=3.8"
