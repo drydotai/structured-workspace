@@ -3,7 +3,7 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A shareable, hosted database you can set up and use with simple natural language commands from within your code.  It's extremely data persistence layer for yoru agents.  It does much of the work you need to build social and collaboratife app back ends.
+A shareable, hosted database you can set up and use with simple natural language commands from within your code.  It's a simple and powerful data persistence layer for yoru agents.  It does much of the work you need to build social and collaborative app back ends.
 
 ## Key Features
 
