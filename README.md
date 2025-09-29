@@ -114,6 +114,8 @@ Enter verification code: 123456
 | `add_type(description)` | Define structured data type |
 | `add_item(description)` | Create new item |
 | `add_folder(description)` | Create organizational folder |
+| `get_type(query)` | Find existing type by natural language query |
+| `get_folder(query)` | Find existing folder by natural language query |
 | `search(query)` | Find items using natural language |
 | `update_items(query)` | Bulk update multiple items |
 | `delete_items(query)` | Delete items matching query |

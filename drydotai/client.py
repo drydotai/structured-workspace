@@ -211,7 +211,7 @@ class DryAIClient:
             return DryAIItem(response['items'][0], self)
         return None
     
-    def get_item(self, item_id: Optional[str] = None, item_type: Optional[str] = None, query: Optional[str] = None) -> Optional[DryAIItem]:
+    def get_item(self, item_id: Optional[str] = None, item_type: Optional[str] = None, query: Optional[str] = None, folder: Optional[str] = None) -> Optional[DryAIItem]:
         """Get an item by ID or search for space by query"""
         params = {}
         if item_id:
@@ -220,7 +220,9 @@ class DryAIClient:
             params['type'] = item_type
         if query:
             params['query'] = query
-        
+        if folder:
+            params['folder'] = folder
+
         response = self._make_request('GET', self.item_url, params=params)
         if response and 'item' in response:
             return DryAIItem(response['item'], self)
@@ -307,7 +309,19 @@ class Space:
     def add_folder(self, query: str) -> Optional[DryAIItem]:
         """Add a new folder to this space"""
         return self.client.create_item('FOLDER', query, self.id)
-    
+
+    def get_type(self, query: str) -> Optional[DryAIItem]:
+        """Get an existing type in this space by natural language query"""
+        # For TYPE items, folder parameter must be set to the space ID
+        item = self.client.get_item(item_type='TYPE', query=query, folder=self.id)
+        return item
+
+    def get_folder(self, query: str) -> Optional[DryAIItem]:
+        """Get an existing folder in this space by natural language query"""
+        # For FOLDER items, folder parameter must be set to the space ID
+        item = self.client.get_item(item_type='FOLDER', query=query, folder=self.id)
+        return item
+
     def delete_items(self, query: str) -> bool:
         """Delete items in this space that match the query"""
         return self.client.delete_items_by_query(self.id, query)
