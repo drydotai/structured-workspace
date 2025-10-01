@@ -144,8 +144,12 @@ class DryAIClient:
         
         return headers
     
-    def _make_request(self, method: str, url: str, data: Optional[Dict[str, Any]] = None, params: Optional[Dict[str, str]] = None) -> Optional[Dict[str, Any]]:
-        """Make HTTP request to the API"""
+    def _make_request(self, method: str, url: str, data: Optional[Dict[str, Any]] = None, params: Optional[Dict[str, str]] = None, silent_404: bool = False) -> Optional[Dict[str, Any]]:
+        """Make HTTP request to the API
+
+        Args:
+            silent_404: If True, don't print error messages for 404 responses (used for get operations)
+        """
         headers = self._get_headers()
 
         try:
@@ -173,6 +177,10 @@ class DryAIClient:
 
             return result
         except requests.RequestException as error:
+            # Check if this is a 404 error and we should be silent
+            if silent_404 and hasattr(error, 'response') and error.response is not None and error.response.status_code == 404:
+                return None
+
             # Always show errors, get detailed message from response if available
             error_message = str(error)
             if hasattr(error, 'response') and error.response is not None:
@@ -223,7 +231,7 @@ class DryAIClient:
         if folder:
             params['folder'] = folder
 
-        response = self._make_request('GET', self.item_url, params=params)
+        response = self._make_request('GET', self.item_url, params=params, silent_404=True)
         if response and 'item' in response:
             return DryAIItem(response['item'], self)
         return None
