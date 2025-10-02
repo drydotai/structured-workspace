@@ -42,8 +42,19 @@ def get_gmail_service():
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            print("🔄 Refreshing expired token...")
-            creds.refresh(Request())
+            try:
+                print("🔄 Refreshing expired token...")
+                creds.refresh(Request())
+                print("✅ Token refreshed successfully")
+            except Exception as e:
+                print(f"⚠️  Token refresh failed: {e}")
+                print("📝 Re-authenticating with browser...")
+                if not os.path.exists('credentials.json'):
+                    print("❌ Error: credentials.json not found!")
+                    print("📝 Please download OAuth 2.0 credentials from Google Cloud Console")
+                    sys.exit(1)
+                flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+                creds = flow.run_local_server(port=0)
         else:
             if not os.path.exists('credentials.json'):
                 print("❌ Error: credentials.json not found!")
@@ -274,8 +285,8 @@ Email content:
 {email_content}
 """
 
-        # Use search to trigger the AI processing
-        result = space.search(processing_query)
+        # Use prompt to trigger the AI processing with multi-intent support
+        result = space.prompt(processing_query)
 
         print(f"  ✅ Processed by AI - {len(result)} item(s) created/updated")
 
@@ -298,7 +309,7 @@ def run():
     print("⏹️  Press Ctrl+C to stop")
     print()
 
-    # Get service, label ID, and space once
+    # Get label ID and space once
     service = get_gmail_service()
     label_id = get_or_create_label(service, PROCESSED_LABEL_NAME)
     space = get_or_create_space()
@@ -309,10 +320,20 @@ def run():
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             print(f"[{timestamp}] 🔍 Checking for unread emails...")
 
-            processed_count = process_emails_once(service, label_id, space)
+            try:
+                processed_count = process_emails_once(service, label_id, space)
 
-            if processed_count > 0:
-                print(f"✅ Processed {processed_count} email(s)")
+                if processed_count > 0:
+                    print(f"✅ Processed {processed_count} email(s)")
+            except Exception as e:
+                # Check if it's an authentication error
+                if 'invalid_grant' in str(e) or 'Token has been expired' in str(e) or 'credentials' in str(e).lower():
+                    print(f"⚠️  Authentication error: {e}")
+                    print("🔄 Refreshing Gmail service...")
+                    service = get_gmail_service()
+                    print("✅ Service refreshed, continuing...")
+                else:
+                    print(f"❌ Error processing emails: {e}")
 
             print(f"⏰ Waiting 5 minutes until next check...")
             print()

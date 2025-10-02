@@ -117,6 +117,7 @@ Enter verification code: 123456
 | `get_type(query)` | Find existing type by natural language query |
 | `get_folder(query)` | Find existing folder by natural language query |
 | `search(query)` | Find items using natural language |
+| `prompt(query)` | Find items with multi-intent support |
 | `update_items(query)` | Bulk update multiple items |
 | `delete_items(query)` | Delete items matching query |
 | `update(query)` | Update space properties |

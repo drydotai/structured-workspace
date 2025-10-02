@@ -130,6 +130,7 @@ class DryAIClient:
         self.base_url = f"{self.server}/api/crud-gpt"
         self.items_url = f"{self.base_url}/items"
         self.item_url = f"{self.base_url}/item"
+        self.prompt_url = f"{self.base_url}/prompt"
     
     def _get_headers(self) -> Dict[str, str]:
         """Get common headers for API requests"""
@@ -246,12 +247,40 @@ class DryAIClient:
         Returns:
             List of DryAIItem
         """
-        params = {'folder': folder, 'query': query, 'multi': 'true'}
+        params = {'folder': folder, 'query': query}
         response = self._make_request('GET', self.items_url, params=params)
 
         if response and response.get('items'):
             return [DryAIItem(item_data, self) for item_data in response['items']]
         return []
+
+    def prompt(self, folder: str, query: str) -> List[DryAIItem]:
+        """Prompt for items in a folder using natural language query with multi-intent support
+
+        Args:
+            folder: Folder ID to search in
+            query: Natural language search query
+
+        Returns:
+            List of DryAIItem created from additional actions
+        """
+        data = {'folder': folder, 'query': query, 'multi': 'true'}
+        response = self._make_request('POST', self.prompt_url, data)
+
+        if not response:
+            return []
+
+        # Collect items from additionalActions responses
+        items = []
+        if 'additionalActions' in response:
+            for action in response['additionalActions']:
+                if isinstance(action, dict) and 'response' in action:
+                    action_response = action['response']
+                    if isinstance(action_response, dict) and 'items' in action_response:
+                        for item_data in action_response['items']:
+                            items.append(DryAIItem(item_data, self))
+
+        return items
     
     def update_item(self, item_id: str, query: str) -> Optional[DryAIItem]:
         """Update an item using natural language instructions"""
@@ -305,6 +334,17 @@ class Space:
             List of DryAIItem
         """
         return self.client.list_items(self.id, query)
+
+    def prompt(self, query: str) -> List[DryAIItem]:
+        """Prompt for items in this space using natural language with multi-intent support
+
+        Args:
+            query: Natural language search query
+
+        Returns:
+            List of DryAIItem
+        """
+        return self.client.prompt(self.id, query)
     
     def add_type(self, query: str) -> Optional[DryAIItem]:
         """Add a new type definition to this space"""
