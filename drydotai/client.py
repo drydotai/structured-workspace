@@ -131,6 +131,7 @@ class DryAIClient:
         self.items_url = f"{self.base_url}/items"
         self.item_url = f"{self.base_url}/item"
         self.prompt_url = f"{self.base_url}/prompt"
+        self.report_url = f"{self.base_url}/report"
     
     def _get_headers(self) -> Dict[str, str]:
         """Get common headers for API requests"""
@@ -218,6 +219,8 @@ class DryAIClient:
         response = self._make_request('POST', self.items_url, data)
         if response and response.get('items'):
             return DryAIItem(response['items'][0], self)
+        elif response and 'item' in response:
+            return DryAIItem(response['item'], self)
         return None
     
     def get_item(self, item_id: Optional[str] = None, item_type: Optional[str] = None, query: Optional[str] = None, folder: Optional[str] = None) -> Optional[DryAIItem]:
@@ -281,6 +284,23 @@ class DryAIClient:
                             items.append(DryAIItem(item_data, self))
 
         return items
+
+    def report(self, folder: str, query: str) -> Optional[str]:
+        """Generate a report for items in a folder using natural language query
+
+        Args:
+            folder: Folder ID to search in
+            query: Natural language query for report generation
+
+        Returns:
+            Report message string if successful, None otherwise
+        """
+        data = {'folder': folder, 'query': query}
+        response = self._make_request('POST', self.report_url, data)
+
+        if response and 'message' in response:
+            return response['message']
+        return None
     
     def update_item(self, item_id: str, query: str) -> Optional[DryAIItem]:
         """Update an item using natural language instructions"""
@@ -345,7 +365,18 @@ class Space:
             List of DryAIItem
         """
         return self.client.prompt(self.id, query)
-    
+
+    def report(self, query: str) -> Optional[str]:
+        """Generate a report for items in this space using natural language
+
+        Args:
+            query: Natural language query for report generation
+
+        Returns:
+            Report message string if successful, None otherwise
+        """
+        return self.client.report(self.id, query)
+
     def add_type(self, query: str) -> Optional[DryAIItem]:
         """Add a new type definition to this space"""
         return self.client.create_item('TYPE', query, self.id)
@@ -482,6 +513,7 @@ def create_space(query: str, auth: Optional[str] = None) -> Optional[Space]:
         _client = DryAIClient(auth_token=auth_token, server_url=server_url)
     
     item = _client.create_item('SMARTSPACE', query)
+
     if item:
         return Space(item, _client)
     return None

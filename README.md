@@ -118,6 +118,7 @@ Enter verification code: 123456
 | `get_folder(query)` | Find existing folder by natural language query |
 | `search(query)` | Find items using natural language |
 | `prompt(query)` | Find items with multi-intent support |
+| `report(query)` | Generate a report about items in the space |
 | `update_items(query)` | Bulk update multiple items |
 | `delete_items(query)` | Delete items matching query |
 | `update(query)` | Update space properties |
@@ -163,6 +164,10 @@ kb.add_type("FAQ with question, answer, and category")
 # Content management
 article = kb.add_item("API integration guide with authentication patterns")
 faqs = kb.search("find all authentication related FAQs")
+
+# Generate reports
+summary = kb.report("Summarize all articles by topic")
+print(summary)
 ```
 
 ## Examples
