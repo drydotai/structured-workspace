@@ -178,11 +178,15 @@ Complete working examples available in [`examples/`](examples/):
 - **[`demo.ipynb`](examples/demo.ipynb)** - Interactive Jupyter notebook walkthrough
 - **[`basic_usage.py`](examples/basic_usage.py)** - Core functionality demonstration
 - **[`issue_tracker_simple.py`](examples/issue_tracker_simple.py)** - Issue tracking system
+- **[`expense_ninja.py`](examples/expense_ninja.py)** - Gmail receipt processor that extracts and tracks expenses
+- **[`slack_reporter.py`](examples/slack_reporter.py)** - Automated deployment tracking and weekly reporting from Slack
 
 ```bash
 # Run examples
 python examples/basic_usage.py
 python examples/issue_tracker_simple.py setup
+python examples/expense_ninja.py
+python examples/slack_reporter.py
 jupyter notebook examples/demo.ipynb
 ```
 
