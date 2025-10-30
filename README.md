@@ -10,7 +10,7 @@ A shareable, cloud database you can set up and use with simple natural language 
 - **Configure and use with natural language API calls**.  Set up, query, perform the CRUD operations, etc. with API calls that take simple natural language strings.
 - **RAG pipeline built in**.  Text data is automatically vector indexed.  You can query your database with natural language prompts.  The relevant text will be retrieved and added to your prompt to generate your answer.
 - **Simple data model**.  The database stores items.  Items have fields; fields have values.  Items have types.  An item's type says what fields it can have.  (In relational database terms: types are like tables, items are like rows, and each column corresponds to a field.)
-- **Sharing and collaboration are built in**.  "Add x@examaple.com as an admin and y@example.com as a member."  Authentication and identity are built in.  Your email is your username and there is passwordless authentication.
+- **Sharing and collaboration are built in**.  "Add x@example.com as an admin and y@example.com as a member."  Authentication and identity are built in.  Your email is your username and there is passwordless authentication.
 - **Granular role-based permission system**.  Specify who can do what with every field of every item.  "Members can view all the tasks, but only admins can mark them as complete."
 - **Hosted, zero-configuration**.  Import the project and get started with a couple lines of code.  The database is hosted.
 - **Automatically generated website**.  Get an automatically generated website where you can work with your data, set up custom views and visualizations for it, etc.
@@ -99,6 +99,7 @@ Enter your email address: developer@company.com
 Enter verification code: 123456
 ✅ Authentication successful!
 ```
+
 ### Core Functions
 
 | Function | Description |
